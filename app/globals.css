@@ -1,0 +1,37 @@
+@import "tailwindcss";
+
+@theme {
+  --color-emerald: #00d09c;
+  --color-emerald-dark: #00a37b;
+  --color-ink: #0f172a;
+  --font-sans: var(--font-noto), "Hiragino Sans", "Noto Sans JP", sans-serif;
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+  body {
+    background: #f8fafc;
+    color: #0f172a;
+    font-feature-settings: "palt";
+    letter-spacing: 0.01em;
+  }
+  ::selection {
+    background: #00d09c33;
+  }
+}
+
+@layer components {
+  .card-border {
+    border: 1px solid #e2e8f0;
+  }
+  .scrollbar-thin::-webkit-scrollbar {
+    height: 6px;
+    width: 6px;
+  }
+  .scrollbar-thin::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+    border-radius: 999px;
+  }
+}
