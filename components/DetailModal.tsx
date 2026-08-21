@@ -48,11 +48,11 @@ export function DetailModal({ migration, onClose }: { migration: Migration; onCl
         <div className="space-y-6 p-5 sm:p-6">
           <div>
             <div className="flex items-center gap-2 text-[13px] font-bold">
-              <span className="rounded-md border border-rose-200 bg-rose-50 px-2.5 py-1 text-rose-600">{m.from}</span>
+              <span className="rounded-md border border-[#f3c3ce] bg-[#fdf0f2] px-2.5 py-1 text-[#d60a34]">{m.from}</span>
               <ArrowRight className="h-4 w-4 text-slate-300" />
-              <span className="rounded-md border border-emerald-200 bg-emerald-50 px-2.5 py-1 text-emerald-600">{m.to}</span>
+              <span className="rounded-md border border-[#c9ecab] bg-[#f2fbe9] px-2.5 py-1 text-[#378d00]">{m.to}</span>
             </div>
-            <h2 className="mt-3 text-xl font-black leading-snug text-slate-900">{m.title}</h2>
+            <h2 className="font-display mt-3 text-xl font-extrabold leading-snug text-[#0f131a]">{m.title}</h2>
             <p className="mt-1.5 text-[13px] leading-relaxed text-slate-500">{m.summary}</p>
             <div className="mt-3 flex flex-wrap items-center gap-2">
               {m.reasons.map((r) => (
@@ -71,8 +71,8 @@ export function DetailModal({ migration, onClose }: { migration: Migration; onCl
           <section>
             <h3 className="mb-2 text-[13px] font-black text-slate-700">A. 移行前後の比較サマリー</h3>
             <div className="grid grid-cols-2 gap-3">
-              <div className="rounded-xl border border-rose-100 bg-rose-50/50 p-3">
-                <p className="mb-1.5 text-[12px] font-bold text-rose-600">{m.from}</p>
+              <div className="rounded-xl border border-[#f3c3ce] bg-[#fdf0f2]/60 p-3">
+                <p className="mb-1.5 text-[12px] font-bold text-[#d60a34]">{m.from}</p>
                 <p className="mb-1 text-[11px] font-bold text-slate-400">メリット</p>
                 <ul className="mb-2 space-y-0.5 text-[12px] text-slate-600">
                   {m.prosBefore.map((v, i) => (
@@ -86,8 +86,8 @@ export function DetailModal({ migration, onClose }: { migration: Migration; onCl
                   ))}
                 </ul>
               </div>
-              <div className="rounded-xl border border-emerald-100 bg-emerald-50/50 p-3">
-                <p className="mb-1.5 text-[12px] font-bold text-emerald-600">{m.to}</p>
+              <div className="rounded-xl border border-[#c9ecab] bg-[#f2fbe9]/60 p-3">
+                <p className="mb-1.5 text-[12px] font-bold text-[#378d00]">{m.to}</p>
                 <p className="mb-1 text-[11px] font-bold text-slate-400">メリット</p>
                 <ul className="mb-2 space-y-0.5 text-[12px] text-slate-600">
                   {m.prosAfter.map((v, i) => (
@@ -108,7 +108,7 @@ export function DetailModal({ migration, onClose }: { migration: Migration; onCl
             <h3 className="mb-2 text-[13px] font-black text-slate-700">B. 乗り換えた決め手・現場の生ログ</h3>
             <p className="whitespace-pre-line rounded-xl border border-slate-200 bg-slate-50 p-3 text-[13px] leading-relaxed text-slate-700">{m.narrative}</p>
             <p className="mb-1 mt-3 text-[11px] font-bold text-slate-400">移行時のハマりどころ・注意点</p>
-            <p className="whitespace-pre-line rounded-xl border border-amber-200 bg-amber-50 p-3 text-[13px] leading-relaxed text-amber-800">{m.pitfalls}</p>
+            <p className="whitespace-pre-line rounded-xl border border-[#ffd699] bg-[#fff6e4] p-3 text-[13px] leading-relaxed text-[#8a5a00]">{m.pitfalls}</p>
           </section>
 
           <section>
@@ -138,7 +138,7 @@ export function DetailModal({ migration, onClose }: { migration: Migration; onCl
               )}
               <button
                 onClick={handleShare}
-                className="flex items-center gap-1 rounded-lg bg-[#0f172a] px-2.5 py-1.5 text-[12px] font-bold text-white transition hover:bg-slate-800"
+                className="flex items-center gap-1 rounded-lg bg-[#3ea8ff] px-2.5 py-1.5 text-[12px] font-bold text-white transition hover:bg-[#0b6fd1]"
               >
                 <Share2 className="h-3.5 w-3.5" />
                 共有

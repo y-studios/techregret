@@ -12,9 +12,9 @@ export function MetricChart({ row }: { row: CompareRow }) {
     return (
       <div className="flex items-center justify-between rounded-lg border border-slate-200 bg-slate-50 px-3 py-2 text-[13px]">
         <span className="font-semibold text-slate-500">{row.label}</span>
-        <span className="font-bold text-rose-500">{row.before}</span>
+        <span className="font-bold text-[#d60a34]">{row.before}</span>
         <span className="text-slate-300">→</span>
-        <span className="font-bold text-emerald-600">{row.after}</span>
+        <span className="font-bold text-[#378d00]">{row.after}</span>
       </div>
     );
   }
@@ -38,8 +38,8 @@ export function MetricChart({ row }: { row: CompareRow }) {
               contentStyle={{ fontSize: 12, borderRadius: 8, border: "1px solid #e2e8f0" }}
             />
             <Bar dataKey="value" radius={[0, 6, 6, 0]} isAnimationActive={false}>
-              <Cell fill="#fb7185" />
-              <Cell fill="#00d09c" />
+              <Cell fill="#d60a34" />
+              <Cell fill="#55c500" />
             </Bar>
           </BarChart>
         </ResponsiveContainer>

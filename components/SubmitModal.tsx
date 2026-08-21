@@ -77,7 +77,7 @@ export function SubmitModal({ onClose, onSubmit }: { onClose: () => void; onSubm
                 value={from}
                 onChange={(e) => setFrom(e.target.value)}
                 placeholder="例: Vercel"
-                className="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm outline-none focus:border-[#00d09c] focus:ring-2 focus:ring-[#00d09c]/20"
+                className="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm outline-none focus:border-[#3ea8ff] focus:ring-2 focus:ring-[#3ea8ff]/20"
               />
             </label>
             <label className="block">
@@ -86,7 +86,7 @@ export function SubmitModal({ onClose, onSubmit }: { onClose: () => void; onSubm
                 value={to}
                 onChange={(e) => setTo(e.target.value)}
                 placeholder="例: Cloudflare Pages"
-                className="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm outline-none focus:border-[#00d09c] focus:ring-2 focus:ring-[#00d09c]/20"
+                className="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm outline-none focus:border-[#3ea8ff] focus:ring-2 focus:ring-[#3ea8ff]/20"
               />
             </label>
           </div>
@@ -96,7 +96,7 @@ export function SubmitModal({ onClose, onSubmit }: { onClose: () => void; onSubm
             <select
               value={category}
               onChange={(e) => setCategory(e.target.value as Category)}
-              className="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm outline-none focus:border-[#00d09c] focus:ring-2 focus:ring-[#00d09c]/20"
+              className="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm outline-none focus:border-[#3ea8ff] focus:ring-2 focus:ring-[#3ea8ff]/20"
             >
               {CATEGORIES.map((c) => (
                 <option key={c} value={c}>
@@ -115,7 +115,7 @@ export function SubmitModal({ onClose, onSubmit }: { onClose: () => void; onSubm
                   type="button"
                   onClick={() => toggleReason(r)}
                   className={`rounded-full border px-3 py-1.5 text-[12px] font-bold transition ${
-                    reasons.includes(r) ? "border-[#00d09c] bg-[#00d09c] text-white" : "border-slate-200 text-slate-600 hover:border-slate-300"
+                    reasons.includes(r) ? "border-[#3ea8ff] bg-[#3ea8ff] text-white" : "border-slate-200 text-slate-600 hover:border-slate-300"
                   }`}
                 >
                   {REASONS[r].emoji} {REASONS[r].label}
@@ -130,7 +130,7 @@ export function SubmitModal({ onClose, onSubmit }: { onClose: () => void; onSubm
               value={title}
               onChange={(e) => setTitle(e.target.value)}
               placeholder="例: 画像最適化コストが月$20を超えたためCFへ移行"
-              className="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm outline-none focus:border-[#00d09c] focus:ring-2 focus:ring-[#00d09c]/20"
+              className="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm outline-none focus:border-[#3ea8ff] focus:ring-2 focus:ring-[#3ea8ff]/20"
             />
           </label>
 
@@ -159,7 +159,7 @@ export function SubmitModal({ onClose, onSubmit }: { onClose: () => void; onSubm
               onChange={(e) => setNarrative(e.target.value)}
               rows={4}
               placeholder="具体的にどのコードや料金体系で詰まったか、移行時の注意点など"
-              className="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm outline-none focus:border-[#00d09c] focus:ring-2 focus:ring-[#00d09c]/20"
+              className="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm outline-none focus:border-[#3ea8ff] focus:ring-2 focus:ring-[#3ea8ff]/20"
             />
           </label>
 
@@ -169,14 +169,14 @@ export function SubmitModal({ onClose, onSubmit }: { onClose: () => void; onSubm
               value={author}
               onChange={(e) => setAuthor(e.target.value)}
               placeholder="匿名可"
-              className="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm outline-none focus:border-[#00d09c] focus:ring-2 focus:ring-[#00d09c]/20"
+              className="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm outline-none focus:border-[#3ea8ff] focus:ring-2 focus:ring-[#3ea8ff]/20"
             />
           </label>
 
           <button
             onClick={handleSubmit}
             disabled={!canSubmit}
-            className="w-full rounded-lg bg-[#0f172a] py-2.5 text-sm font-bold text-white transition hover:bg-slate-800 disabled:cursor-not-allowed disabled:bg-slate-200 disabled:text-slate-400"
+            className="w-full rounded-lg bg-[#0f131a] py-2.5 text-sm font-bold text-white transition hover:bg-[#272c35] disabled:cursor-not-allowed disabled:bg-slate-200 disabled:text-slate-400"
           >
             投稿する
           </button>

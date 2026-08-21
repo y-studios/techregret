@@ -22,7 +22,7 @@ function PlanRow({
     <div className="rounded-xl border border-slate-200 p-4">
       <div className="flex items-start justify-between gap-3">
         <div className="flex items-start gap-2.5">
-          <span className="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-[#00d09c]/10 text-[#00a37b]">{icon}</span>
+          <span className="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-[#3ea8ff]/10 text-[#0b6fd1]">{icon}</span>
           <div>
             <p className="text-[14px] font-black text-slate-900">{title}</p>
             <p className="mt-0.5 text-[12px] leading-relaxed text-slate-500">{desc}</p>
