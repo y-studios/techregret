@@ -62,8 +62,11 @@ export function SubmitModal({ onClose, onSubmit }: { onClose: () => void; onSubm
         className="scrollbar-thin max-h-[92vh] w-full max-w-lg overflow-y-auto rounded-t-2xl bg-white p-5 sm:rounded-2xl sm:p-6"
         onClick={(e) => e.stopPropagation()}
       >
-        <div className="mb-4 flex items-center justify-between">
-          <p className="text-[15px] font-black text-slate-900">乗り換え理由を投稿する</p>
+        <div className="mb-4 flex items-center justify-between gap-3">
+          <div className="flex items-center gap-3">
+            <img src="/illust/code-contribution_8k0x.svg" alt="" aria-hidden="true" className="h-12 w-12 shrink-0" />
+            <p className="text-[15px] font-black text-slate-900">乗り換え理由を投稿する</p>
+          </div>
           <button onClick={onClose} className="rounded-full p-1.5 text-slate-400 transition hover:bg-slate-100 hover:text-slate-700">
             <X className="h-5 w-5" />
           </button>

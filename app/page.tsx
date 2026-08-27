@@ -58,13 +58,21 @@ export default function Home() {
       <Header query={query} onQueryChange={setQuery} onPost={() => setShowSubmit(true)} />
 
       <main className="mx-auto max-w-6xl px-4 py-6 sm:px-6 sm:py-8">
-        <section className="mb-6">
-          <h1 className="font-display text-lg font-extrabold text-[#0f131a] sm:text-xl">
-            公式ドキュメントに載っていない、現場の「乗り換えた決定打」
-          </h1>
-          <p className="mt-1 text-[13px] text-[#5c5f66]">
-            料金高騰・ビルド遅延・開発体験・仕様変更——技術スタックを移行した生々しい理由を検索・投稿できる技術選定の罠回避DB。
-          </p>
+        <section className="mb-6 flex items-center gap-4 sm:gap-6">
+          <div className="min-w-0 flex-1">
+            <h1 className="font-display text-lg font-extrabold text-[#0f131a] sm:text-xl">
+              公式ドキュメントに載っていない、現場の「乗り換えた決定打」
+            </h1>
+            <p className="mt-1 text-[13px] text-[#5c5f66]">
+              料金高騰・ビルド遅延・開発体験・仕様変更——技術スタックを移行した生々しい理由を検索・投稿できる技術選定の罠回避DB。
+            </p>
+          </div>
+          <img
+            src="/illust/choose_5kz4.svg"
+            alt=""
+            aria-hidden="true"
+            className="hidden h-20 w-auto shrink-0 sm:block sm:h-24"
+          />
         </section>
 
         <section className="mb-6">
@@ -86,17 +94,23 @@ export default function Home() {
             />
           ))}
           {filtered.length === 0 && (
-            <p className="col-span-full py-16 text-center text-sm text-[#8f9faa]">該当するログが見つかりませんでした。</p>
+            <div className="col-span-full flex flex-col items-center gap-4 py-16 text-center">
+              <img src="/illust/file-searching_yska.svg" alt="" aria-hidden="true" className="h-40 w-auto" />
+              <p className="text-sm text-[#8f9faa]">該当するログが見つかりませんでした。</p>
+            </div>
           )}
         </section>
 
         <section className="mt-10 overflow-hidden rounded-2xl bg-[#0f131a] p-5 sm:p-6">
           <div className="flex flex-col items-start justify-between gap-3 sm:flex-row sm:items-center">
-            <div>
-              <p className="font-display text-[14px] font-extrabold text-white">技術選定・乗り換えトレンド分析レポート</p>
-              <p className="mt-1 text-[12px] text-white/50">
-                自社ツール・SaaSのスポンサー掲載、または技術スタック別トレンド分析レポートのDLはこちらから。
-              </p>
+            <div className="flex items-center gap-4">
+              <img src="/illust/fixing-bugs_1ytu.svg" alt="" aria-hidden="true" className="hidden h-16 w-auto shrink-0 sm:block" />
+              <div>
+                <p className="font-display text-[14px] font-extrabold text-white">技術選定・乗り換えトレンド分析レポート</p>
+                <p className="mt-1 text-[12px] text-white/50">
+                  自社ツール・SaaSのスポンサー掲載、または技術スタック別トレンド分析レポートのDLはこちらから。
+                </p>
+              </div>
             </div>
             <button
               onClick={() => setShowPricing(true)}
