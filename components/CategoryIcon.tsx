@@ -1,4 +1,4 @@
-import { Server, Layers, Database, ShieldCheck, GitBranch, Palette, Box } from "lucide-react";
+import { Server, Layers, Database, ShieldCheck, GitBranch, Palette, Box, Code2, Network } from "lucide-react";
 import type { Category } from "@/lib/types";
 
 const ICONS: Record<Category, typeof Server> = {
@@ -8,6 +8,8 @@ const ICONS: Record<Category, typeof Server> = {
   Auth: ShieldCheck,
   ORM: GitBranch,
   UI: Palette,
+  Language: Code2,
+  Architecture: Network,
 };
 
 export function CategoryIcon({ category, className }: { category: Category; className?: string }) {

@@ -62,7 +62,7 @@ export function DetailModal({ migration, onClose }: { migration: Migration; onCl
               ))}
               <span className="flex items-center gap-0.5">
                 {Array.from({ length: 5 }).map((_, i) => (
-                  <Star key={i} className={`h-3.5 w-3.5 ${i < m.satisfaction ? "fill-amber-400 text-amber-400" : "fill-slate-200 text-slate-200"}`} />
+                  <Star key={i} className={`h-3.5 w-3.5 ${i < (m.satisfaction ?? 0) ? "fill-amber-400 text-amber-400" : "fill-slate-200 text-slate-200"}`} />
                 ))}
               </span>
             </div>
@@ -75,13 +75,13 @@ export function DetailModal({ migration, onClose }: { migration: Migration; onCl
                 <p className="mb-1.5 text-[12px] font-bold text-[#d60a34]">{m.from}</p>
                 <p className="mb-1 text-[11px] font-bold text-slate-400">メリット</p>
                 <ul className="mb-2 space-y-0.5 text-[12px] text-slate-600">
-                  {m.prosBefore.map((v, i) => (
+                  {(m.prosBefore ?? []).map((v, i) => (
                     <li key={i}>・{v}</li>
                   ))}
                 </ul>
                 <p className="mb-1 text-[11px] font-bold text-slate-400">デメリット</p>
                 <ul className="space-y-0.5 text-[12px] text-slate-600">
-                  {m.consBefore.map((v, i) => (
+                  {(m.consBefore ?? []).map((v, i) => (
                     <li key={i}>・{v}</li>
                   ))}
                 </ul>
@@ -90,13 +90,13 @@ export function DetailModal({ migration, onClose }: { migration: Migration; onCl
                 <p className="mb-1.5 text-[12px] font-bold text-[#378d00]">{m.to}</p>
                 <p className="mb-1 text-[11px] font-bold text-slate-400">メリット</p>
                 <ul className="mb-2 space-y-0.5 text-[12px] text-slate-600">
-                  {m.prosAfter.map((v, i) => (
+                  {(m.prosAfter ?? []).map((v, i) => (
                     <li key={i}>・{v}</li>
                   ))}
                 </ul>
                 <p className="mb-1 text-[11px] font-bold text-slate-400">デメリット</p>
                 <ul className="space-y-0.5 text-[12px] text-slate-600">
-                  {m.consAfter.map((v, i) => (
+                  {(m.consAfter ?? []).map((v, i) => (
                     <li key={i}>・{v}</li>
                   ))}
                 </ul>
@@ -108,7 +108,7 @@ export function DetailModal({ migration, onClose }: { migration: Migration; onCl
             <h3 className="mb-2 text-[13px] font-black text-slate-700">B. 乗り換えた決め手・現場の生ログ</h3>
             <p className="whitespace-pre-line rounded-xl border border-slate-200 bg-slate-50 p-3 text-[13px] leading-relaxed text-slate-700">{m.narrative}</p>
             <p className="mb-1 mt-3 text-[11px] font-bold text-slate-400">移行時のハマりどころ・注意点</p>
-            <p className="whitespace-pre-line rounded-xl border border-[#ffd699] bg-[#fff6e4] p-3 text-[13px] leading-relaxed text-[#8a5a00]">{m.pitfalls}</p>
+            <p className="whitespace-pre-line rounded-xl border border-[#ffd699] bg-[#fff6e4] p-3 text-[13px] leading-relaxed text-[#8a5a00]">{m.pitfalls ?? ""}</p>
           </section>
 
           <section>
@@ -122,7 +122,7 @@ export function DetailModal({ migration, onClose }: { migration: Migration; onCl
 
           <section className="flex items-center justify-between border-t border-slate-100 pt-4">
             <div>
-              <p className="text-[13px] font-bold text-slate-700">投稿者: {m.author}</p>
+              <p className="text-[13px] font-bold text-slate-700">投稿者: {m.author ?? "匿名"}</p>
               <p className="text-[11px] text-slate-400">{m.createdAt}</p>
             </div>
             <div className="flex items-center gap-2">

@@ -7,7 +7,7 @@ export const REASONS: Record<ReasonKey, { label: string; emoji: string }> = {
   deprecation: { label: "サービスの仕様変更/終了", emoji: "⚠️" },
 };
 
-export type Category = "Hosting" | "Framework" | "DB" | "Auth" | "ORM" | "UI";
+export type Category = "Hosting" | "Framework" | "DB" | "Auth" | "ORM" | "UI" | "Language" | "Architecture";
 
 export interface CompareRow {
   label: string;
@@ -23,17 +23,24 @@ export interface Migration {
   reasons: ReasonKey[];
   title: string;
   summary: string;
-  satisfaction: 1 | 2 | 3 | 4 | 5;
-  upvotes: number;
-  prosBefore: string[];
-  consBefore: string[];
-  prosAfter: string[];
-  consAfter: string[];
   narrative: string;
-  pitfalls: string;
   compareMetrics: CompareRow[];
-  author: string;
-  authorX?: string;
   createdAt: string;
   isUserSubmitted?: boolean;
+
+  // ユーザー投稿(SubmitModal経由)のみで使うフィールド
+  satisfaction?: 1 | 2 | 3 | 4 | 5;
+  upvotes?: number;
+  prosBefore?: string[];
+  consBefore?: string[];
+  prosAfter?: string[];
+  consAfter?: string[];
+  pitfalls?: string;
+  author?: string;
+  authorX?: string;
+
+  // 実企業の事例(data/cases.ts)のみで使うフィールド。詳細ページ(/case/[id])を持つ
+  company?: string;
+  sourceName?: string;
+  sourceUrl?: string;
 }

@@ -1,6 +1,7 @@
 "use client";
 
-import { Star, Lightbulb, ArrowRight } from "lucide-react";
+import Link from "next/link";
+import { Star, Lightbulb, ArrowRight, ExternalLink } from "lucide-react";
 import type { Migration } from "@/lib/types";
 import { REASONS } from "@/lib/types";
 import { CategoryIcon } from "@/components/CategoryIcon";
@@ -17,6 +18,8 @@ export function MigrationCard({
   onOpen: () => void;
 }) {
   const m = migration;
+  const isRealCase = Boolean(m.sourceUrl);
+
   return (
     <div className="group flex flex-col gap-3 rounded-2xl border border-[#e2e5e5] bg-white p-4 transition hover:-translate-y-0.5 hover:border-[#3ea8ff]/40 hover:shadow-[0_8px_24px_-8px_rgba(62,168,255,0.25)] sm:p-5">
       <div className="flex items-center justify-between">
@@ -31,10 +34,20 @@ export function MigrationCard({
         </span>
       </div>
 
-      <button onClick={onOpen} className="text-left">
-        <p className="text-[15px] font-bold leading-snug text-[#0f131a] group-hover:text-[#0b6fd1]">{m.title}</p>
-        <p className="mt-1 line-clamp-2 text-[13px] leading-relaxed text-[#5c5f66]">{m.summary}</p>
-      </button>
+      {isRealCase ? (
+        <Link href={`/case/${m.id}/`} className="text-left">
+          {m.company && (
+            <p className="mb-0.5 text-[11px] font-bold text-[#0b6fd1]">{m.company}</p>
+          )}
+          <p className="text-[15px] font-bold leading-snug text-[#0f131a] group-hover:text-[#0b6fd1]">{m.title}</p>
+          <p className="mt-1 line-clamp-2 text-[13px] leading-relaxed text-[#5c5f66]">{m.summary}</p>
+        </Link>
+      ) : (
+        <button onClick={onOpen} className="text-left">
+          <p className="text-[15px] font-bold leading-snug text-[#0f131a] group-hover:text-[#0b6fd1]">{m.title}</p>
+          <p className="mt-1 line-clamp-2 text-[13px] leading-relaxed text-[#5c5f66]">{m.summary}</p>
+        </button>
+      )}
 
       <div className="flex flex-wrap gap-1.5">
         {m.reasons.map((r) => (
@@ -45,15 +58,24 @@ export function MigrationCard({
       </div>
 
       <div className="mt-1 flex items-center justify-between border-t border-[#edeeee] pt-3">
-        <div className="flex items-center gap-1">
-          {Array.from({ length: 5 }).map((_, i) => (
-            <Star
-              key={i}
-              className={`h-3.5 w-3.5 ${i < m.satisfaction ? "fill-amber-400 text-amber-400" : "fill-slate-200 text-slate-200"}`}
-            />
-          ))}
-          <span className="ml-1 text-[11px] font-bold text-slate-400">{m.satisfaction.toFixed(1)}</span>
-        </div>
+        {typeof m.satisfaction === "number" ? (
+          <div className="flex items-center gap-1">
+            {Array.from({ length: 5 }).map((_, i) => (
+              <Star
+                key={i}
+                className={`h-3.5 w-3.5 ${i < m.satisfaction! ? "fill-amber-400 text-amber-400" : "fill-slate-200 text-slate-200"}`}
+              />
+            ))}
+            <span className="ml-1 text-[11px] font-bold text-slate-400">{m.satisfaction.toFixed(1)}</span>
+          </div>
+        ) : isRealCase ? (
+          <span className="flex items-center gap-1 text-[11px] font-semibold text-[#8f9faa]">
+            <ExternalLink className="h-3 w-3" />
+            出典あり・詳細を見る
+          </span>
+        ) : (
+          <span />
+        )}
         <button
           onClick={onUpvote}
           className={`flex items-center gap-1 rounded-full border px-2.5 py-1 text-[12px] font-bold transition active:scale-95 ${
@@ -63,7 +85,7 @@ export function MigrationCard({
           }`}
         >
           <Lightbulb className={`h-3.5 w-3.5 ${upvoted ? "fill-[#ffa909]" : ""}`} />
-          わかる ({m.upvotes + (upvoted ? 1 : 0)})
+          わかる ({(m.upvotes ?? 0) + (upvoted ? 1 : 0)})
         </button>
       </div>
     </div>
