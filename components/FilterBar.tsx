@@ -27,7 +27,7 @@ export function FilterBar({
             onClick={() => onChange(p.key)}
             className={`flex shrink-0 items-center gap-1.5 rounded-full border px-3.5 py-1.5 text-[13px] font-bold transition ${
               isActive
-                ? "border-[#3ea8ff] bg-[#3ea8ff] text-white shadow-sm"
+                ? "border-[#1E63E9] bg-[#1E63E9] text-white shadow-sm"
                 : "border-[#e2e5e5] bg-white text-[#40444d] hover:border-[#c7cbcb] hover:bg-[#f5f6f6]"
             }`}
           >

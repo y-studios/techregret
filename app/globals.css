@@ -1,21 +1,21 @@
 @import "tailwindcss";
 
 /*
- * 配色は実サイトの計測値ベース:
- * - Zenn (青 #3ea8ff / 暖色オレンジ #ffa909) … CTA・共感ボタン
- * - Qiita (緑 #55c500 / 赤 #d60a34) … From/Toバッジ
- * - NSTOCK (漆黒 #0f131a / パープル #a981ff / ミント #46ffda) … ヘッダー・統計ヒーロー
+ * 配色は「レントラー」（黄×青の電気タイプ）モチーフ。黒要素は白・グレーで代用。
+ * - ブランド青 #1e63e9 / ブランド黄 #ffc800 … CTA・アクセント
+ * - Qiita計測値の緑 #55c500 / 赤 #d60a34 … From/Toバッジ（意味を持つ配色として維持）
+ * - 黒の代わりに炭グレー #1f2937 をベースのダーク色として使用
  */
 @theme {
-  --color-brand-blue: #3ea8ff;
-  --color-brand-blue-dark: #0b6fd1;
+  --color-brand-blue: #1e63e9;
+  --color-brand-blue-dark: #1547b0;
+  --color-brand-yellow: #ffc800;
+  --color-brand-yellow-soft: #fff3cc;
   --color-brand-orange: #ffa909;
   --color-brand-green: #55c500;
   --color-brand-green-dark: #378d00;
   --color-brand-red: #d60a34;
-  --color-brand-purple: #a981ff;
-  --color-brand-mint: #46ffda;
-  --color-ink: #0f131a;
+  --color-ink: #1f2937;
   --font-sans: var(--font-noto), "Hiragino Sans", "Noto Sans JP", sans-serif;
   --font-display: var(--font-manrope), var(--font-noto), sans-serif;
 }
@@ -26,12 +26,12 @@
   }
   body {
     background: #f5f6f6;
-    color: #0f131a;
+    color: #1f2937;
     font-feature-settings: "palt";
     letter-spacing: 0.01em;
   }
   ::selection {
-    background: #3ea8ff33;
+    background: #1e63e933;
   }
 }
 

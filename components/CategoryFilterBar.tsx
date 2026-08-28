@@ -18,7 +18,7 @@ export function CategoryFilterBar({
         onClick={() => onChange("all")}
         className={`flex shrink-0 items-center gap-1.5 rounded-full border px-3 py-1.5 text-[12.5px] font-semibold transition ${
           active === "all"
-            ? "border-[#0f131a] bg-[#0f131a] text-white"
+            ? "border-[#1F2937] bg-[#1F2937] text-white"
             : "border-[#e2e5e5] bg-white text-[#5c5f66] hover:border-[#c7cbcb] hover:bg-[#f5f6f6]"
         }`}
       >
@@ -32,7 +32,7 @@ export function CategoryFilterBar({
             onClick={() => onChange(c)}
             className={`flex shrink-0 items-center gap-1.5 rounded-full border px-3 py-1.5 text-[12.5px] font-semibold transition ${
               isActive
-                ? "border-[#0f131a] bg-[#0f131a] text-white"
+                ? "border-[#1F2937] bg-[#1F2937] text-white"
                 : "border-[#e2e5e5] bg-white text-[#5c5f66] hover:border-[#c7cbcb] hover:bg-[#f5f6f6]"
             }`}
           >

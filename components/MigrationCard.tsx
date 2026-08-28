@@ -21,30 +21,41 @@ export function MigrationCard({
   const isRealCase = Boolean(m.sourceUrl);
 
   return (
-    <div className="group flex flex-col gap-3 rounded-2xl border border-[#e2e5e5] bg-white p-4 transition hover:-translate-y-0.5 hover:border-[#3ea8ff]/40 hover:shadow-[0_8px_24px_-8px_rgba(62,168,255,0.25)] sm:p-5">
+    <div className="group flex flex-col gap-3 rounded-2xl border border-[#e2e5e5] bg-white p-4 transition hover:-translate-y-0.5 hover:border-[#1E63E9]/40 hover:shadow-[0_8px_24px_-8px_rgba(30,99,233,0.25)] sm:p-5">
       <div className="flex items-center justify-between">
-        <div className="flex flex-wrap items-center gap-1.5 text-[12px] font-bold">
-          <span className="rounded-md border border-[#f3c3ce] bg-[#fdf0f2] px-2 py-1 text-[#d60a34]">{m.from}</span>
-          <ArrowRight className="h-3.5 w-3.5 text-slate-300" />
-          <span className="rounded-md border border-[#c9ecab] bg-[#f2fbe9] px-2 py-1 text-[#378d00]">{m.to}</span>
-        </div>
+        {isRealCase ? (
+          <div className="flex items-center gap-2">
+            <img
+              src={`/logos/${m.id}.png`}
+              alt=""
+              aria-hidden="true"
+              className="h-6 w-6 rounded-md border border-[#e2e5e5] bg-white object-contain p-0.5"
+            />
+            <span className="text-[12.5px] font-bold text-[#1F2937]">{m.company}</span>
+          </div>
+        ) : (
+          <span className="text-[12px] font-bold text-[#8f9faa]">投稿ログ</span>
+        )}
         <span className="flex items-center gap-1 rounded-md bg-[#f5f6f6] px-2 py-1 text-[11px] font-bold text-[#5c5f66]">
           <CategoryIcon category={m.category} className="h-3 w-3" />
           {m.category}
         </span>
       </div>
 
+      <div className="flex flex-wrap items-center gap-1.5 text-[12px] font-bold">
+        <span className="rounded-md border border-[#f3c3ce] bg-[#fdf0f2] px-2 py-1 text-[#d60a34]">{m.from}</span>
+        <ArrowRight className="h-3.5 w-3.5 text-slate-300" />
+        <span className="rounded-md border border-[#c9ecab] bg-[#f2fbe9] px-2 py-1 text-[#378d00]">{m.to}</span>
+      </div>
+
       {isRealCase ? (
         <Link href={`/case/${m.id}/`} className="text-left">
-          {m.company && (
-            <p className="mb-0.5 text-[11px] font-bold text-[#0b6fd1]">{m.company}</p>
-          )}
-          <p className="text-[15px] font-bold leading-snug text-[#0f131a] group-hover:text-[#0b6fd1]">{m.title}</p>
+          <p className="text-[15px] font-bold leading-snug text-[#1F2937] group-hover:text-[#1547B0]">{m.title}</p>
           <p className="mt-1 line-clamp-2 text-[13px] leading-relaxed text-[#5c5f66]">{m.summary}</p>
         </Link>
       ) : (
         <button onClick={onOpen} className="text-left">
-          <p className="text-[15px] font-bold leading-snug text-[#0f131a] group-hover:text-[#0b6fd1]">{m.title}</p>
+          <p className="text-[15px] font-bold leading-snug text-[#1F2937] group-hover:text-[#1547B0]">{m.title}</p>
           <p className="mt-1 line-clamp-2 text-[13px] leading-relaxed text-[#5c5f66]">{m.summary}</p>
         </button>
       )}

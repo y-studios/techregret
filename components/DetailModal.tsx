@@ -52,7 +52,7 @@ export function DetailModal({ migration, onClose }: { migration: Migration; onCl
               <ArrowRight className="h-4 w-4 text-slate-300" />
               <span className="rounded-md border border-[#c9ecab] bg-[#f2fbe9] px-2.5 py-1 text-[#378d00]">{m.to}</span>
             </div>
-            <h2 className="font-display mt-3 text-xl font-extrabold leading-snug text-[#0f131a]">{m.title}</h2>
+            <h2 className="font-display mt-3 text-xl font-extrabold leading-snug text-[#1F2937]">{m.title}</h2>
             <p className="mt-1.5 text-[13px] leading-relaxed text-slate-500">{m.summary}</p>
             <div className="mt-3 flex flex-wrap items-center gap-2">
               {m.reasons.map((r) => (
@@ -138,7 +138,7 @@ export function DetailModal({ migration, onClose }: { migration: Migration; onCl
               )}
               <button
                 onClick={handleShare}
-                className="flex items-center gap-1 rounded-lg bg-[#3ea8ff] px-2.5 py-1.5 text-[12px] font-bold text-white transition hover:bg-[#0b6fd1]"
+                className="flex items-center gap-1 rounded-lg bg-[#1E63E9] px-2.5 py-1.5 text-[12px] font-bold text-white transition hover:bg-[#1547B0]"
               >
                 <Share2 className="h-3.5 w-3.5" />
                 共有

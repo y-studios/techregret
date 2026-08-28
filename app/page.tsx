@@ -70,10 +70,10 @@ export default function Home() {
           className="pointer-events-none absolute -right-6 top-10 hidden h-56 w-auto opacity-90 lg:block xl:-right-2"
         />
         <div className="relative mx-auto max-w-2xl text-center">
-          <p className="eyebrow font-display text-[12px] font-bold uppercase tracking-[0.16em] text-[#3ea8ff]">
+          <p className="eyebrow font-display text-[12px] font-bold uppercase tracking-[0.16em] text-[#1E63E9]">
             Tech Migration Database
           </p>
-          <h1 className="font-display mt-3 text-[28px] font-extrabold leading-[1.4] text-[#0f131a] sm:text-[38px]">
+          <h1 className="font-display mt-3 text-[28px] font-extrabold leading-[1.4] text-[#1F2937] sm:text-[38px]">
             公式ドキュメントに載っていない、
             <br />
             現場の「乗り換えた決定打」
@@ -122,7 +122,7 @@ export default function Home() {
             <div className="flex items-center gap-4">
               <img src="/illust/fixing-bugs_1ytu.svg" alt="" aria-hidden="true" className="hidden h-16 w-auto shrink-0 sm:block" />
               <div>
-                <p className="font-display text-[14px] font-extrabold text-[#0f131a]">技術選定・乗り換えトレンド分析レポート</p>
+                <p className="font-display text-[14px] font-extrabold text-[#1F2937]">技術選定・乗り換えトレンド分析レポート</p>
                 <p className="mt-1 text-[12px] text-[#8f9faa]">
                   自社ツール・SaaSのスポンサー掲載、または技術スタック別トレンド分析レポートのDLはこちらから。
                 </p>
@@ -130,7 +130,7 @@ export default function Home() {
             </div>
             <button
               onClick={() => setShowPricing(true)}
-              className="flex shrink-0 items-center gap-1.5 rounded-full bg-[#3ea8ff] px-4 py-2 text-sm font-bold text-white transition hover:bg-[#0b6fd1]"
+              className="flex shrink-0 items-center gap-1.5 rounded-full bg-[#1E63E9] px-4 py-2 text-sm font-bold text-white transition hover:bg-[#1547B0]"
             >
               <CreditCard className="h-4 w-4" />
               プランを見る

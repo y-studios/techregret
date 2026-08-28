@@ -43,4 +43,13 @@ export interface Migration {
   company?: string;
   sourceName?: string;
   sourceUrl?: string;
+
+  // 詳細ページの拡充用（あれば使う。無ければnarrativeにフォールバック）
+  challenge?: string;
+  approach?: string;
+  resultSummary?: string;
+  background?: string;
+  process?: string;
+  results?: string;
+  lessons?: string;
 }
