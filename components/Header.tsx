@@ -1,15 +1,13 @@
 "use client";
 
-import { Search, Plus, ArrowRightLeft } from "lucide-react";
+import { Search, ArrowRightLeft } from "lucide-react";
 
 export function Header({
   query,
   onQueryChange,
-  onPost,
 }: {
   query: string;
   onQueryChange: (v: string) => void;
-  onPost: () => void;
 }) {
   return (
     <header className="sticky top-0 z-30 border-b border-[#e2e5e5] bg-white/90 backdrop-blur">
@@ -25,8 +23,8 @@ export function Header({
           </div>
         </div>
 
-        <div className="flex flex-1 items-center gap-2 sm:max-w-md">
-          <div className="relative flex-1">
+        <div className="w-full sm:max-w-xs">
+          <div className="relative">
             <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[#8f9faa]" />
             <input
               value={query}
@@ -35,14 +33,6 @@ export function Header({
               className="w-full rounded-full border border-[#e2e5e5] bg-[#f5f6f6] py-2 pl-9 pr-3 text-sm text-[#1F2937] outline-none placeholder:text-[#8f9faa] transition focus:border-[#1E63E9] focus:bg-white focus:ring-2 focus:ring-[#1E63E9]/20"
             />
           </div>
-          <button
-            onClick={onPost}
-            className="flex shrink-0 items-center gap-1.5 rounded-full bg-[#1E63E9] px-3.5 py-2 text-sm font-bold text-white transition hover:bg-[#1547B0] active:scale-[0.98]"
-          >
-            <Plus className="h-4 w-4" />
-            <span className="hidden sm:inline">乗り換え理由を投稿する</span>
-            <span className="sm:hidden">投稿</span>
-          </button>
         </div>
       </div>
     </header>

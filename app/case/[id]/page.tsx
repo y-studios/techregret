@@ -4,7 +4,8 @@ import { ArrowLeft, ArrowRight, ExternalLink, CalendarDays, Building2, AlertTria
 import { CASES } from "@/data/cases";
 import { REASONS } from "@/lib/types";
 import { CategoryIcon } from "@/components/CategoryIcon";
-import { MetricChart } from "@/components/MetricChart";
+import { ArticleBody } from "@/components/ArticleBody";
+import { MetricsTable } from "@/components/MetricsTable";
 
 export function generateStaticParams() {
   return CASES.map((c) => ({ id: c.id }));
@@ -67,14 +68,14 @@ export default async function CaseDetailPage({ params }: { params: Promise<{ id:
         </div>
 
         {m.company && (
-          <div className="mt-4 flex items-center gap-2">
+          <div className="mt-4 flex items-center gap-2.5">
             <img
               src={`/logos/${m.id}.png`}
               alt=""
               aria-hidden="true"
-              className="h-7 w-7 rounded-md border border-[#e2e5e5] bg-white object-contain p-0.5"
+              className="h-10 w-10 rounded-lg border border-[#e2e5e5] bg-white object-contain p-1.5"
             />
-            <p className="flex items-center gap-1.5 text-[13px] font-bold text-[#1547B0]">
+            <p className="flex items-center gap-1.5 text-[14px] font-bold text-[#1547B0]">
               <Building2 className="h-3.5 w-3.5" />
               {m.company}
             </p>
@@ -125,31 +126,27 @@ export default async function CaseDetailPage({ params }: { params: Promise<{ id:
 
         <section className="mt-10">
           <h2 className="font-display mb-3 text-[17px] font-black text-[#1F2937]">背景</h2>
-          <p className="whitespace-pre-line text-[15px] leading-[1.9] text-[#40444d]">{background}</p>
+          <ArticleBody text={background} />
         </section>
 
         {process && (
           <section className="mt-10">
             <h2 className="font-display mb-3 text-[17px] font-black text-[#1F2937]">移行のプロセス</h2>
-            <p className="whitespace-pre-line text-[15px] leading-[1.9] text-[#40444d]">{process}</p>
-          </section>
-        )}
-
-        {results && (
-          <section className="mt-10">
-            <h2 className="font-display mb-3 text-[17px] font-black text-[#1F2937]">結果</h2>
-            <p className="whitespace-pre-line text-[15px] leading-[1.9] text-[#40444d]">{results}</p>
+            <ArticleBody text={process} />
           </section>
         )}
 
         {m.compareMetrics.length > 0 && (
           <section className="mt-10">
             <h2 className="font-display mb-3 text-[17px] font-black text-[#1F2937]">移行前後の変化</h2>
-            <div className="grid grid-cols-1 gap-2.5 sm:grid-cols-2">
-              {m.compareMetrics.map((row, i) => (
-                <MetricChart key={i} row={row} />
-              ))}
-            </div>
+            <MetricsTable rows={m.compareMetrics} />
+          </section>
+        )}
+
+        {results && (
+          <section className="mt-10">
+            <h2 className="font-display mb-3 text-[17px] font-black text-[#1F2937]">結果</h2>
+            <ArticleBody text={results} />
           </section>
         )}
 

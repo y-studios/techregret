@@ -26,18 +26,7 @@ export interface Migration {
   narrative: string;
   compareMetrics: CompareRow[];
   createdAt: string;
-  isUserSubmitted?: boolean;
-
-  // ユーザー投稿(SubmitModal経由)のみで使うフィールド
-  satisfaction?: 1 | 2 | 3 | 4 | 5;
   upvotes?: number;
-  prosBefore?: string[];
-  consBefore?: string[];
-  prosAfter?: string[];
-  consAfter?: string[];
-  pitfalls?: string;
-  author?: string;
-  authorX?: string;
 
   // 実企業の事例(data/cases.ts)のみで使うフィールド。詳細ページ(/case/[id])を持つ
   company?: string;
