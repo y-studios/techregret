@@ -32,3 +32,8 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# ローカル自動実行(launchd + claude CLI)の作業ファイル。
+# local-publish.sh が git add -A するため、除外しないとコミットに混入する。
+.claude/
+.publish.log
