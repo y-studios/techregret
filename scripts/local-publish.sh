@@ -14,7 +14,7 @@ cd "$(dirname "$0")/.."
 
 git pull --quiet origin main
 
-"$CLAUDE_BIN" -p "リポジトリ直下の ROUTINE.md を読んで、そこに書かれている手順に厳密に従い、TechRegret(techregret.loous.net)の data/cases.ts に実在・出典確認済みの移行事例を1件だけ追加してください。出典はWebFetchで必ず実在確認し、確認できない場合は何も追加せずに終了してください。ANTHROPIC_API_KEY等のAnthropic APIは絶対に使わず、あなた自身の推論で書いてください。コミットまで行えばよく、pushはこのスクリプトが行います。自動実行なので人間向けの詳しい報告は不要です。" \
+"$CLAUDE_BIN" -p "リポジトリ直下の ROUTINE.md を読んで、そこに書かれている手順に厳密に従い、TechRegret(techregret.loous.net)の data/cases.ts に実在・出典確認済みの移行事例を1件だけ追加してください。出典はWebFetchで必ず実在確認し、確認できない場合は何も追加せずに終了してください。ANTHROPIC_API_KEY等のAnthropic APIと、Ahrefs(MCPツール含む)は絶対に使わず、あなた自身の推論で書いてください。コミットまで行えばよく、pushはこのスクリプトが行います。自動実行なので人間向けの詳しい報告は不要です。" \
   --dangerously-skip-permissions
 
 if [ -n "$(git status --porcelain)" ]; then
