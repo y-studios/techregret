@@ -4,6 +4,27 @@ import type { Migration } from "@/lib/types";
 // 出典URLは各エントリの sourceUrl を参照。全件、公開当時のブログ記事等の一次情報をもとに要約。
 export const CASES: Migration[] = [
   {
+    id: "castingone-mysql-to-postgresql-alloydb",
+    company: "CastingONE",
+    from: "MySQL（Google Cloud SQL）",
+    to: "PostgreSQL（Google Cloud AlloyDB、Row Level Security採用）",
+    category: "DB",
+    reasons: ["dx"],
+    title: "CastingONE、クライアント企業データのセキュリティ強化のためMySQLからPostgreSQL（AlloyDB）へ移行",
+    summary: "クライアント企業の増加に伴い単一スキーマでのデータ管理にセキュリティ上のリスクが生じたため、PostgreSQLのRow Level Security（RLS）でクライアントごとにデータを論理的に分割する狙いでMySQLからAlloyDBへ移行した。",
+    narrative: "採用管理サービス等を提供するCastingONEは、クライアント企業の増加に伴い、単一スキーマで全クライアントのデータを管理する構成にセキュリティ上のリスクを感じるようになった。そこでPostgreSQLが備えるRow Level Security（RLS）という、データを論理的に分割する仕組みに着目し、各クライアント企業のデータをテーブル単位ではなく行単位でアクセス制御できるようにするため、MySQL（Cloud SQL）からPostgreSQL（AlloyDB）への移行を決めた。移行方式としては新旧DBへ同時書き込みするDual Writer構成も検討したが、MySQLとPostgreSQLでAuto Incrementの採番値が異なる可能性がありデータ整合性を保証できないため断念し、QA期間で入念にテストしたうえで一度の切り替えで移行する方針をとった。データ移行はCSVエクスポート→ダウンロード→PostgreSQL形式へ変換→外部キー制約を外してインサート、という4ステップで構成し、約6人のエンジニアが約半年かけ、4回のリハーサルを経て本番切り替えを行った。",
+    challenge: "クライアント企業の増加で単一スキーマ管理のセキュリティリスクが増大していた",
+    approach: "PostgreSQLのRLSで行単位のアクセス制御を実現するためAlloyDBへ一括切り替え移行",
+    resultSummary: "稼働当初に軽微なエラーはあったが、その後は安定稼働しRLSによるセキュリティ強化を実現",
+    background: "CastingONEはクライアント企業の増加に伴い、単一スキーマで全クライアントのデータを管理する既存構成にセキュリティ上のリスクを感じるようになった。PostgreSQLにはRow Level Security（RLS）という、データを論理的に分割してアクセス制御できる仕組みがあり、これを使えば各クライアント企業のデータを行単位で分離できる。そこでMySQL（Google Cloud SQL）からPostgreSQL（Google Cloud AlloyDB）への移行を決定した。移行先のAlloyDBはPostgreSQLと完全互換性を持ちながら、Cloud SQLと比較してパフォーマンスとコストの両面で優れていると判断されて選ばれた。バックエンドはGo言語・クリーンアーキテクチャで構成されており、MySQLRepositoryに倣う形でPostgresRepositoryを実装し、go generateコマンドで自動同期する仕組みを整えた。",
+    process: "移行方式として、新旧DBへ同時に書き込むDual Writer構成も検討されたが、MySQLとPostgreSQLではAuto Incrementの採番値が異なる可能性があり、データ整合性を保証できないという理由から採用を見送った。最終的に、QA期間で入念なテストと永続化層テストの強化を行ったうえで、一度の切り替えで本番移行する方針を選んだ。\n\nスキーマはpgloaderで変換した上でインデックス名やシーケンスの命名などを手作業で調整し、データ移行は次の4ステップで構成された。\n\n- CSVエクスポート: MySQLのデータをGCSへ出力（read replicaを使い並行処理、約1時間）\n- CSVダウンロード: GCE上のローカルSSDへ取得（約7分）\n- CSV変換: PostgreSQL形式へ並行処理で変換（約7分）\n- インサート: 外部キー制約を一時的に外してインポート（約1時間）\n\n約6人のエンジニアが約半年かけて計画・実装を進め、本番切り替え前に4回のリハーサルを実施して手順を検証した。",
+    results: "本番切り替え後、稼働当初は軽微なエラーが発生したものの、その後は基本的に安定して稼働している。狙い通りPostgreSQLのRLSを導入でき、クライアント企業ごとにデータを行単位で論理分割してアクセス制御する体制が実現した。記事中に移行によるコスト削減額やパフォーマンス改善の具体的な数値は示されていない。",
+    compareMetrics: [],
+    sourceName: "CastingONE Tech Blog（Zenn）「MySQLからPostgreSQLへ 〜移行の全貌解説〜」",
+    sourceUrl: "https://zenn.dev/castingone_dev/articles/472526807a06cc",
+    createdAt: "2024-03-08",
+  },
+  {
     id: "baseconnect-rails-neo4j-to-go",
     company: "Baseconnect",
     from: "Ruby on Rails + Neo4j（ORM: activegraph）",
