@@ -4,6 +4,31 @@ import type { Migration } from "@/lib/types";
 // 出典URLは各エントリの sourceUrl を参照。全件、公開当時のブログ記事等の一次情報をもとに要約。
 export const CASES: Migration[] = [
   {
+    id: "quizmarket-ankimaker-firestore-to-cloudsql",
+    company: "QuizMarket（暗記メーカー）",
+    from: "Firestore（Firebase）",
+    to: "Cloud SQL for PostgreSQL",
+    category: "DB",
+    reasons: ["cost", "performance", "dx"],
+    title: "学習アプリ「暗記メーカー」、7年運用のFirestoreから1億件超データをCloud SQLへ無停止移行",
+    summary: "180万ダウンロードの学習アプリ「暗記メーカー」が、レイテンシ・費用・開発体験の3つの課題を解決するため、1億件超の問題データをFirestoreからCloud SQL for PostgreSQLへダブルライト方式で無停止移行し、クエリ応答を1秒から100ミリ秒未満に短縮した。",
+    narrative: "学習管理サービス「暗記メーカー」を運営するQuizMarketは、リリースから約10年で180万ダウンロードを突破し、1億件を超える問題データが蓄積されたFirestoreの運用に3つの課題を抱えていた。デフォルトリージョンがアメリカだったため単純なクエリでも約1秒のレイテンシが発生し、ストレージ料金は無料枠を超過して他DBより割高になり、さらに多対多リレーションの実装が困難でマルチプラットフォーム展開とも相性が悪かった。これらを解決するため、日本リージョンのCloud SQL for PostgreSQLへの移行を決断。クライアントの直接アクセスを排除してAPIサーバ経由に一本化したうえで、新旧DBへ同時に書き込むダブルライト方式を採用し、既存データをクエリカーソルで段階的に移行、最後に読み取り先をCloud SQLへ切り替えてFirestoreへの書き込みを止めるという無停止移行を実現した。結果、クエリ応答時間は1秒から100ミリ秒未満へ短縮され、ストレージ料金は80%削減、リレーション実装も容易になった。",
+    challenge: "7年運用のFirestoreでレイテンシ・費用・多対多リレーション実装の3課題が顕在化",
+    approach: "ダブルライト方式でCloud SQL for PostgreSQLへ段階的に無停止移行",
+    resultSummary: "クエリ応答が1秒から100ミリ秒未満に短縮、ストレージ料金は80%削減",
+    background: "「暗記メーカー」は自分だけの問題集を作れる学習支援サービスで、iOS・Android・Webで展開されリリースから約10年、180万ダウンロードを突破していた。データベースにはFirestoreを使い続けていたが、1億件を超える問題データが蓄積される中で、デフォルトリージョンがアメリカだったため単純なクエリでも約1秒のレイテンシが発生していた。加えてFirestoreの無料枠（1日あたり5万Read/2万Write）を超過し、ストレージ料金が他のDBより割高になっていたことも負担になっていた。さらに、NoSQLであるFirestoreでは多対多リレーションの実装が難しく、マルチプラットフォーム展開ともデータモデル上の相性が悪いという開発面の課題もあった。著者はこれらを踏まえ、そもそもNoSQLを選んだこと自体が技術力不足による誤りだったと振り返っている。",
+    process: "移行はクライアントアプリがFirestoreへ直接アクセスする構成をまずやめ、すべてAPIサーバ経由でアクセスする形に作り替えるところから始まった。このAPI層の構築のため、約1ヶ月間新規機能開発を停止して移行作業に専念した。\n\nその後、以下の手順で段階的な無停止移行を進めた。\n\n- 新旧DB両方に同時書き込みするダブルライト方式を導入(冪等性確保にPrismaのskipDuplicatesオプションを活用)\n- 既存データをクエリカーソルを使って段階的にCloud SQLへ移行(問題データの移行だけで3日程度を要した)\n- 読み取り先をFirestoreからCloud SQLへ切り替え\n- Firestoreへの書き込みを停止\n\n移行先にはMySQLではなくCloud SQL for PostgreSQLを選び、日本リージョンに配置してCloud Runとプライベート接続で統合した。",
+    results: "移行によりクエリ応答時間は約1秒から100ミリ秒未満へと大幅に短縮された。ストレージ料金は80%削減され、従量課金による費用の読みにくさも解消されて予測可能な費用体系になった。開発面でも多対多リレーションの実装が容易になり、ロジックをサーバ側に集約できるようになった。移行完了から3ヶ月間の運用でも安定稼働を確認している。",
+    lessons: "著者は、そもそもNoSQLであるFirestoreを選択したこと自体が技術力不足による判断ミスだったと振り返っている。また、データアクセスをAPIサーバ経由に集約するリポジトリ層の重要性や、サービス初期段階での費用予測の重要性を学びとして挙げている。",
+    compareMetrics: [
+      { label: "クエリ応答時間", before: "約1秒", after: "100ミリ秒未満" },
+      { label: "ストレージ料金", before: "無料枠超過で割高", after: "80%削減" },
+    ],
+    sourceName: "QuizMarket Tech Blog（Zenn）「7年運用した Firestore から 1億件超えのデータを Cloud SQL に移行し、速度と費用と開発体験を改善した話」",
+    sourceUrl: "https://zenn.dev/ymdkit/articles/77ce7b64cdb460",
+    createdAt: "2025-12-28",
+  },
+  {
     id: "castingone-mysql-to-postgresql-alloydb",
     company: "CastingONE",
     from: "MySQL（Google Cloud SQL）",
