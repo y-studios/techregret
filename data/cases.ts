@@ -4,6 +4,33 @@ import type { Migration } from "@/lib/types";
 // 出典URLは各エントリの sourceUrl を参照。全件、公開当時のブログ記事等の一次情報をもとに要約。
 export const CASES: Migration[] = [
   {
+    id: "mamorio-heroku-to-aws-ecs",
+    company: "MAMORIO",
+    from: "Heroku（Enterprise契約）",
+    to: "AWS（ECS + Fargate、PostgreSQL on RDS、ElastiCache）",
+    category: "Hosting",
+    reasons: ["cost"],
+    title: "MAMORIO、6年間使ったHerokuのインフラをECS初心者のCTOが3ヶ月でAWSへ移行しインフラコストを約40%削減",
+    summary: "落とし物防止タグを手がけるMAMORIOは、Heroku Enterpriseの年間契約更新を前にコスト削減の限界を感じ、CTOが自らECS + Fargate構成を構築して2023年11月から約3ヶ月でAWSへ移行。AWSのコストは25%増えたが、インフラコストの半分を占めていたHerokuの費用がゼロになり、全体で約40%削減した。",
+    narrative: "落とし物防止タグ事業を展開するMAMORIOは、6年間Herokuの東京リージョンでインフラを運用してきたが、Herokuのコストダウンにはすでに限界に達していた。Heroku Enterpriseの一年契約を更新する期日を前に、iOSアプリとRailsとReactの開発が主領域でECS初心者だったCTOが、ChatGPTなどのLLMツールの登場で自身の作業スピードと学習能力が向上したことを踏まえて移行に踏み切った。移行先はECS + Fargateを中心に、ロックインを避けるためAuroraではなくPostgreSQL、スケジューラーはECSのスケジュールタスク、監視はCloudWatch、キャッシュはElastiCacheという構成を選んだ。システム全体の負荷の90%を占めるタグ発見情報ログを対象に負荷テストを行い、Amazon社のエンジニアに無料で技術相談し、DBのバックアップ・リストア手順を何度もリハーサルしたうえで、深夜0時にメンテナンスモードへ切り替えてDBを移し、ドメインの向き先を変更して2024年2月5日に移行を完了した。結果、AWSのコストが25%増加する代わりにインフラコストの半分を占めていたHerokuのコストがゼロになり、インフラコストを約40%削減した。",
+    challenge: "Herokuのコストダウンが限界に達し、Enterprise契約の更新期日が迫っていた",
+    approach: "ECS初心者のCTOが負荷テスト・AWS技術相談・リハーサルを重ねてECS + Fargateへ移行",
+    resultSummary: "Heroku費用がゼロになりインフラコストを約40%削減、停止1時間以内で切替完了",
+    background: "MAMORIOは落とし物防止タグ事業を展開しており、6年間にわたりHerokuの東京リージョンでインフラを運用してきた。しかしHerokuのコストダウンにはすでに限界に達しており、Heroku Enterpriseの一年契約を更新する期日を前に、さらなるコスト削減のためAWSへの移行を検討することになった。移行を担ったCTOはiOSアプリとRailsとReactの開発が主な知識領域で、ECSについては初心者だった。それでも移行に踏み切れたのは、ChatGPTなどのLLMツールの登場によって自身の作業スピードと学習能力が向上し、実現可能性が高まったと判断したためである。移行先の構成は、アプリケーションをECS + Fargateで動かし、データベースはロックインを避けるためAuroraを採用せずPostgreSQLを選択、スケジューラーはECSのスケジュールタスク、監視はCloudWatch、キャッシュはElastiCacheとした。",
+    process: "移行作業は2023年11月に開始し、以下のステップで進めた。\n\n- 負荷テスト: ユーザーのスマートフォンから送られるタグの発見情報のログがシステム全体の負荷の90%を占めて最も重かったため、これを対象に負荷テストを実施した\n- 技術相談: Amazon社のエンジニアから無料でアドバイスを受けた\n- リハーサル: Herokuのデータベースのバックアップをダウンロードしてから移行先のDBにリストアする手順を、不安がなくなるまで何度も繰り返した\n- 本番切替: 深夜0時から開始し、Herokuのメンテナンスモードをオンにしてからバックアップ・リストアを実施し、最後にドメインの向き先を変更して完了\n\nリハーサルの過程で、当初予定していたローカル経由の手順ではなく、Heroku内のインスタンスにダウンロードしてからAWSへ直接アップロードする方法に変えることで作業時間を7割以上削減できることが判明し、サービス停止時間を1時間以内に収める余裕が確保できた。移行は2024年2月5日に完了し、期間は約3ヶ月だった。",
+    results: "移行によってAWSのコストが25%増加する代わりに、それまでインフラコストの半分を占めていたHerokuのコストがゼロになり、インフラコスト全体を約40%削減した。本番切替はサービス停止時間1時間以内で完了している。ECS初心者のCTOが1人で3ヶ月かけて完遂した点も特徴で、LLMツールによる学習・作業の効率化が移行の実現可能性を後押しした。",
+    lessons: "著者は移行を検討している人に向けて、Amazon社の技術相談は必ず受けるべきであること、リハーサルは不安が全くなくなるまで何度も行うべきことを強調している。リハーサルを重ねたことでDB移行手順の改善点が見つかり、作業時間を7割以上削減できたことがその裏付けとなっている。",
+    compareMetrics: [
+      { label: "インフラコスト全体", before: "Heroku費用が全体の約半分", after: "約40%削減" },
+      { label: "AWSのコスト", before: "移行前", after: "25%増加" },
+      { label: "Herokuのコスト", before: "インフラコストの半分", after: "ゼロ" },
+      { label: "移行期間", before: "2023年11月開始", after: "2024年2月5日完了（約3ヶ月）" },
+    ],
+    sourceName: "MAMORIO CTO 高野政徳（Zenn）「ECS初心者の私が6年間使っていたHerokuのインフラを3ヶ月でAWSに移行させるまで」",
+    sourceUrl: "https://zenn.dev/iototaku/articles/7beb58415b042b",
+    createdAt: "2024-03-27",
+  },
+  {
     id: "quizmarket-ankimaker-firestore-to-cloudsql",
     company: "QuizMarket（暗記メーカー）",
     from: "Firestore（Firebase）",
