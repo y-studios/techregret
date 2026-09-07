@@ -4,6 +4,33 @@ import type { Migration } from "@/lib/types";
 // 出典URLは各エントリの sourceUrl を参照。全件、公開当時のブログ記事等の一次情報をもとに要約。
 export const CASES: Migration[] = [
   {
+    id: "counterworks-mysql-to-postgresql-rls",
+    company: "COUNTERWORKS（カウンターワークス）",
+    from: "RDS for MySQL（Ruby on Rails）",
+    to: "Aurora PostgreSQL（Row Level Security活用）",
+    category: "DB",
+    reasons: ["dx"],
+    title: "COUNTERWORKS、マルチテナント化に必須のRow Level SecurityのためMySQLからPostgreSQLへ。200近いテーブルを段階移行",
+    summary: "商業施設向けリーシングDXクラウド「ショップカウンター エンタープライズ」を運営するCOUNTERWORKSは、マルチテナント化にあたりPostgreSQLのRow Level Security（RLS）が必須要件となり、RDS for MySQLからAurora PostgreSQLへの移行を実施した。200近いテーブルをwrapperクラスの自動生成と段階的な本番切り替えで移行し、リリース後には照合順序とSTIモデルに起因する2件の障害が発生したが、旧DBを計画的に残していたことで当日中に復旧した。",
+    narrative: "COUNTERWORKSが運営する商業施設向けリーシングDXクラウド管理システム「ショップカウンター エンタープライズ（SCE）」はRuby on Railsで実装され、RDS for MySQLをデータベースとして使っていた。マルチテナント化を進めるにあたり、顧客ごとのデータ分離を宣言的なポリシーで担保できるRow Level Security（RLS）が必須要件となったが、MySQLにはPostgreSQLの`CREATE POLICY`や`ALTER TABLE ... ENABLE ROW LEVEL SECURITY`に相当する宣言的なRLS機能がなく、Aurora PostgreSQLへの移行が必要と判断された。テーブル数は当時200近くあり、同じプロセスからMySQLとPostgreSQLの両方に同時接続するため`Mysql::ApplicationRecord`と`Postgresql::ApplicationRecord`というwrapperクラスをrakeタスクで自動生成する仕組みを構築し、database.ymlの3-tier化、development/testでのPostgreSQL対応、環境変数`USE_POSTGRESQL`による切り替え、マイグレーションファイルの両DB対応、本番データの検証、顧客ごとの段階的な本番切り替え、旧DBの数週間保持という手順で移行を進めた。インデックス名の最大長差異（64→63文字）、AUTO INCREMENTの廃止、citext型の導入、datetime精度の指定（precision: 6）などMySQLとPostgreSQLの仕様差異にも対応した。リリース後、Aurora PostgreSQLのデフォルト照合順序が`en_US.UTF-8`だったためリソース名の並び順が崩れる障害と、STI（単一テーブル継承）を使うテーブルで自動生成されたwrapperクラスが`WHERE type IN (...)`の暗黙絞り込みにより0件しか取得できなくなる障害の2件が発生したが、旧MySQLを切り戻し用に計画的に残していたことで当日中に復旧できた。",
+    challenge: "マルチテナント化にRow Level Securityが必須だが、MySQLには宣言的なRLS機能がなかった",
+    approach: "200近いテーブルをwrapperクラス自動生成と段階的な本番切り替えでAurora PostgreSQLへ移行",
+    resultSummary: "移行完了後に2件の障害が発生したが、旧DBを計画的に残し当日中に復旧",
+    background: "COUNTERWORKSは商業施設向けリーシングDXクラウド管理システム「ショップカウンター エンタープライズ（SCE）」を運営しており、バックエンドはRuby on Rails、データベースはRDS for MySQLだった。プロダクトのマルチテナント化を進める中で、顧客ごとのデータ分離をアプリケーションコードではなくデータベース層で宣言的に保証できるRow Level Security（RLS）が必須要件として浮上した。しかしMySQLにはPostgreSQLの`CREATE POLICY`や`ALTER TABLE ... ENABLE ROW LEVEL SECURITY`に相当する宣言的なRLS機能が存在しない。この機能的な制約が、稼働中のプロダクトデータベースをRDS for MySQLからAurora PostgreSQLへ移行するという意思決定の直接の理由になった。",
+    process: "移行は主に以下のステップで段階的に進められた。\n\n- database.ymlの3-tier化により、同一アプリケーションからMySQLとPostgreSQLの両方に同時接続できる環境を用意\n- development/test環境でPostgreSQLを起動し、動作確認を先行実施\n- 環境変数`USE_POSTGRESQL`による接続先切り替え機構を実装\n- マイグレーションファイルをPostgreSQL対応版として整備\n- 本番データをコピーして検証したうえで、顧客ごとに段階的に本番切り替え\n- 切り戻しに備え、旧MySQLを数週間保持\n\nテーブル数は当時200近くあり、同じプロセスからMySQLとPostgreSQLの両方に同時接続する必要があったため、`Mysql::ApplicationRecord`と`Postgresql::ApplicationRecord`というwrapperクラスをrakeタスクで自動生成する仕組みを構築した。あわせてインデックス名の最大長差異（64→63文字）、AUTO INCREMENTの廃止、citext型の導入、datetime精度の指定（precision: 6）など、MySQLとPostgreSQLの仕様差異にも個別に対応した。",
+    results: "本番切り替えのリリース後、2件の障害が発生した。1件目はAurora PostgreSQLのデフォルト照合順序が`en_US.UTF-8`だったことにより、リソース名の並び順が崩れるというもの。2件目はSTI（単一テーブル継承）を使うテーブルで、自動生成されたwrapperクラスがSTI階層に紛れ込み、`WHERE type IN (...)`という暗黙の絞り込みによって0件しか取得できなくなるというものだった。検証スクリプトも同じ関数を経由していたため、事前の差分検出はできていなかった。いずれも旧MySQLを切り戻し用に計画的に残していたことで、当日中の復旧が可能になった。",
+    lessons: "照合順序（ロケール）はデフォルト任せにせず、プロダクト要件に合わせて意識的に選ぶ必要があるという教訓が得られた。またテーブル名ベースとモデル名ベースの両方で対象を列挙し突合することで、命名規約から外れたモデルの取りこぼしを防げること、検証スクリプトは移行スクリプトと異なる実装経路を持たせるべきであることも挙げられている。旧DBを計画的に一定期間残しておいたことが、実際の障害発生時に当日中の復旧を可能にした最大の要因だった。",
+    compareMetrics: [
+      { label: "データベース", before: "RDS for MySQL", after: "Aurora PostgreSQL" },
+      { label: "テーブル数", before: "約200近く", after: "約200近く（全件移行）" },
+      { label: "マルチテナント分離", before: "アプリケーション側で実装", after: "Row Level Security（宣言的ポリシー）" },
+      { label: "リリース後の障害", before: "-", after: "2件（照合順序・STIモデル）、旧DB保持により当日復旧" },
+    ],
+    sourceName: "COUNTERWORKS Tech Blog（Zenn）「マルチテナント化のために本番稼働中のMySQLをPostgreSQLに移行した話（マルチテナント化連載 第2回・PostgreSQL移行編）」",
+    sourceUrl: "https://zenn.dev/counterworks/articles/0eb98271af2991",
+    createdAt: "2026-06-09",
+  },
+  {
     id: "spacemarket-rails-to-nestjs",
     company: "スペースマーケット",
     from: "Ruby on Rails（2014年開発開始のモノリス）",
