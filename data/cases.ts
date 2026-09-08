@@ -4,6 +4,33 @@ import type { Migration } from "@/lib/types";
 // 出典URLは各エントリの sourceUrl を参照。全件、公開当時のブログ記事等の一次情報をもとに要約。
 export const CASES: Migration[] = [
   {
+    id: "mediaengine-heroku-to-aws",
+    company: "メディアエンジン",
+    from: "Heroku（Container Runtime / Node.js / Heroku Postgres / Redis）",
+    to: "AWS（ECS / Amplify / RDS / ElastiCache）",
+    category: "Hosting",
+    reasons: ["performance", "cost"],
+    title: "メディアエンジン、HerokuとAWS混在の管理煩雑化とレイテンシ課題を解消。2名2週間でECS・Amplify・RDSへ全面移行しパフォーマンス4倍に",
+    summary: "コンテンツマーケティング支援を手がけるメディアエンジンは、Ruby on Rails製システムをHerokuで運用していたが、国内リージョンがないことによるレイテンシと、AWS運用システムとの混在による管理の煩雑化を課題視し、ECS・Amplify・RDS・ElastiCacheへ全面移行した。2名体制・約2週間で移行し、システム全体のパフォーマンスが4倍前後に向上した。",
+    narrative: "メディアエンジンは初期に開発したシステムのバックエンドにRuby on RailsとPostgreSQLを採用しており、開発のしやすさからHerokuで運用していた。一方で近年開発したシステムはAWSのECSを使用しており、AWSとHerokuが混在することで管理が煩雑化していたほか、Herokuは国内にサーバを置けずAWSと比較してレイテンシが大きくなるという課題があった。この課題を解消するため、社内のインフラに詳しいメンバーとの2名体制で、調査・実作業合わせて約2週間かけて移行を実施した。APIサーバはHeroku Container RuntimeからECSへ、既存のDockerfileをそのまま利用する形で移行した。フロントエンドはHerokuからAmplifyへ移行するにあたり、それまで@nuxtjs/proxyモジュールを使ってRailsサーバと通信していた構成を見直し、@nuxtjs/proxyを廃止してフロントエンドから直接APIサーバと通信する構成に変更、Rails側にはrack-corsを導入してCORS設定を行った。データベースはHeroku PostgreSQLの管理ページから手動でバックアップを作成し、pg_restoreを使ってRDSへデータ移行した。監視ツールもRollbarとScout APMからSentryへ統合した。移行の結果、システム全体のパフォーマンスが4倍前後まで向上し、インフラをAWSに一元化することでメンテナンス性が向上、Terraformによるインフラ管理も可能になった。",
+    challenge: "HerokuとAWSの混在による管理の煩雑化と、Heroku特有のレイテンシ課題",
+    approach: "APIサーバをECS、フロントエンドをAmplify、DBをRDSへ2名2週間で移行",
+    resultSummary: "システム全体のパフォーマンスが4倍前後に向上、インフラをAWSへ一元化",
+    background: "メディアエンジンは初期に構築したシステムのバックエンドにRuby on RailsとPostgreSQLを採用しており、スムーズに開発できることを理由にHerokuで運用していた。一方、近年開発したシステムはAWSのECSを利用しており、AWSを使うシステムとHerokuを使うシステムが混在することで運用管理が煩雑化していた。さらにHerokuは国内にサーバを設置できないため、AWSと比較してレイテンシが大きくなるという問題も抱えていた。これらの課題を解消するため、HerokuからAWSへのインフラ全面移行を決断した。",
+    process: "移行は著者と社内のインフラに詳しいメンバーの2名体制で、調査・実作業を含めておよそ2週間かけて実施された。\n\n- APIサーバ: Heroku Container RuntimeからECSへ。既存のDockerfileをそのまま利用できたため比較的スムーズに移行できた\n- フロントエンド: HerokuからAmplifyへ。従来@nuxtjs/proxyモジュールでRailsサーバと通信していた構成を廃止し、フロントエンドから直接APIサーバへ通信する構成に変更、Rails側にrack-corsを導入してCORSを設定\n- スケジューラ: Heroku SchedulerからECSへ\n- データベース: Heroku PostgreSQLの管理ページから手動バックアップを作成し、pg_restoreでRDSへデータ移行。特に課題なくスムーズに実施できた\n- キャッシュ: Heroku RedisからElastiCacheへ\n- ログ: PapertrailからCloudWatchへ\n- 監視: RollbarとScout APMからSentryへ統合",
+    results: "全体的にシステムのパフォーマンスが4倍前後まで向上した。インフラをAWSへ一元化したことでメンテナンスがしやすくなり、インフラの大部分をTerraformで管理できるようになった。一方で監視面では、Scout APMが持っていたN+1問題検出機能をSentryは持たないため、著者は「一概にSentryの方が上回っているとも言い切れない」と振り返っている。",
+    lessons: "パフォーマンスモニタリングはECSのメトリクスなどである程度代替できると判断しSentryへ統合したが、Scout APMのN+1問題検出のような専用機能を失う面もあり、監視ツールの統合には一長一短があるという学びが得られた。",
+    compareMetrics: [
+      { label: "APIサーバ", before: "Heroku Container Runtime", after: "ECS" },
+      { label: "フロントエンド", before: "Node.js on Heroku", after: "Amplify" },
+      { label: "データベース", before: "Heroku Postgres", after: "RDS" },
+      { label: "パフォーマンス", before: "-", after: "4倍前後に向上" },
+    ],
+    sourceName: "メディアエンジン Tech Blog（Zenn）「インフラをHerokuからAWSへ移行した話」",
+    sourceUrl: "https://zenn.dev/media_engine/articles/migrated-infrastructure-from-heroku-to-aws",
+    createdAt: "2021-08-31",
+  },
+  {
     id: "counterworks-mysql-to-postgresql-rls",
     company: "COUNTERWORKS（カウンターワークス）",
     from: "RDS for MySQL（Ruby on Rails）",
