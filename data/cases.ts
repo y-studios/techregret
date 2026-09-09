@@ -4,6 +4,31 @@ import type { Migration } from "@/lib/types";
 // 出典URLは各エントリの sourceUrl を参照。全件、公開当時のブログ記事等の一次情報をもとに要約。
 export const CASES: Migration[] = [
   {
+    id: "primenumber-redash-ec2-to-ecs",
+    company: "primeNumber（プライムナンバー）",
+    from: "EC2（自前運用のRedash / PostgreSQL 9.6 / Redis）",
+    to: "ECS on Fargate + RDS(PostgreSQL) + ElastiCache(Redis)",
+    category: "Hosting",
+    reasons: ["dx", "performance"],
+    title: "primeNumber、単一EC2にRedash一式が同居しキュー詰まりが頻発。構成管理不能な状態からECS on Fargate + RDS + ElastiCacheへ段階移行",
+    summary: "データ分析基盤支援サービスを提供するprimeNumberは、社内で使うBIツールRedashをEC2上に自前構築していたが、Server・Worker・Scheduler・PostgreSQL・Redisがすべて1台のEC2インスタンスに同居し構成管理されておらず、効率的なスケーリングができずキュー詰まりが頻発していた。副業的に1日1〜2時間というリソース制約の中、PostgreSQLのバージョンアップからRDS移行、ElastiCache移行、ECSでのWorker・Scheduler・Server移行まで、各フェーズの変更差分を最小限に抑える方針で段階的に移行した。",
+    narrative: "primeNumberでは社内向けBIツールとしてRedashをEC2上に自前構築して運用していたが、Server・複数のWorker・Scheduler・PostgreSQL・Redisといった構成要素がすべて1台のEC2インスタンスに同居しており、構成管理されていないためメンテナンス性が低く、効率的なスケーリングもできずキュー詰まりがたびたび発生していた。担当者は副業的に1日1〜2時間というリソース制約の中で、各フェーズの変更差分を最小限に抑えることでリスクを抑えながら段階的に移行を進めた。まずEC2内のPostgreSQLを9.6から16へアップグレードしてRDS移行に備え、バックアップ取得・リストアの形でRDS(PostgreSQL)へ移行（ダウンタイムあり）。続いてRedisをElastiCacheへ移行してメンテナンスコストを削減した。その後ECS上にAdhoc Worker・Scheduled Worker・通常Workerの各サービスを立ち上げてEC2側のWorkerを停止し、複数起動できないという制限があるSchedulerはECS側を0コンテナで準備してからEC2を止めてECS側を起動する手順で切り替えた（ダウンタイムあり）。HTTPS通信はサブドメインで事前検証してGoogle認証の動作も確認したうえで、最後にServer(UI)をECSでサービスインし、既存ドメインへのアクセスをECS側へルーティングして移行を完了した。",
+    challenge: "RedashのServer・Worker・Scheduler・DB・Redisが単一EC2に同居し構成管理不能、キュー詰まりも頻発",
+    approach: "PostgreSQLバージョンアップ→RDS移行→ElastiCache移行→ECS(Worker→Scheduler→Server)の順で段階移行",
+    resultSummary: "各フェーズの変更差分を最小化し、副業的なリソース制約下でも安全に移行を完了",
+    background: "primeNumberはデータ分析基盤の構築・運用を支援するクラウドサービス「TROCCO」などを提供する企業で、社内向けのBIツールとしてRedashを利用していた。このRedashはEC2上に自前構築されており、Server・複数のWorker・Scheduler・PostgreSQL・Redisといった構成要素がすべて1台のEC2インスタンスに同居していた。構成管理がされていないためメンテナンス性が低く、単一インスタンスでは効率的なスケーリングもできず、キュー詰まりがたびたび発生するという課題を抱えていた。この状況を解消するため、担当者は副業的に1日1〜2時間というリソース制約の中で、ECS on Fargateと各種マネージドサービスへの移行を進めることにした。",
+    process: "「メンテナンスごとの変更差分を最小限にする」という方針のもと、以下の順序で段階的に移行を進めた。\n\n- EC2内のPostgreSQLを9.6から16へアップグレードし、RDS移行に向けた互換性を確保\n- バックアップ取得とリストアによりEC2内PostgreSQLをRDSへ移行（ダウンタイムあり）\n- Redisをメンテナンスコスト削減のためElastiCacheへ移行\n- ECS上にAdhoc Worker・Scheduled Worker・通常Workerの各サービスを立ち上げ、EC2側のWorkerを停止\n- 複数起動できない制限があるSchedulerは、ECS側を0コンテナの状態で準備してからEC2を停止し、ECS側を起動する手順で切り替え（ダウンタイムあり）\n- サブドメインを用意してHTTPS通信とGoogle認証の動作を事前検証\n- 最後にServer(UI)をECSでサービスインし、既存ドメインへのアクセスをECS側へルーティング",
+    results: "段階的な移行により、Redashを構成するServer・Worker・Scheduler・PostgreSQL・Redisをすべてマネージドサービス（RDS・ElastiCache）とECS on Fargate上のサービス群に置き換えた。各フェーズを単一の変更に限定したことで、問題発生時にも切り分けや復旧がしやすい設計となった。記事内に具体的なコスト削減額やパフォーマンス改善の数値は明記されていない。",
+    compareMetrics: [
+      { label: "Redash基盤", before: "単一EC2（Server/Worker/Scheduler/PostgreSQL/Redis同居）", after: "ECS on Fargate + RDS + ElastiCache" },
+      { label: "PostgreSQL", before: "9.6（EC2内自前運用）", after: "16（RDS）" },
+      { label: "Redis", before: "EC2内自前運用", after: "ElastiCache" },
+    ],
+    sourceName: "primeNumber Tech Blog（Zenn）「EC2からECSへのRedash段階的移行戦略」",
+    sourceUrl: "https://zenn.dev/primenumber/articles/a410343c35b341",
+    createdAt: "2025-01-08",
+  },
+  {
     id: "mediaengine-heroku-to-aws",
     company: "メディアエンジン",
     from: "Heroku（Container Runtime / Node.js / Heroku Postgres / Redis）",
