@@ -4,6 +4,33 @@ import type { Migration } from "@/lib/types";
 // 出典URLは各エントリの sourceUrl を参照。全件、公開当時のブログ記事等の一次情報をもとに要約。
 export const CASES: Migration[] = [
   {
+    id: "coconala-ec2-to-ecs-fargate",
+    company: "ココナラ（システムプラットフォーム部）",
+    from: "単一のAmazon EC2（APIサーバとバッチ処理が同居、Ansibleで構成管理）",
+    to: "Amazon ECS on AWS Fargate（用途別3種のタスク定義、CircleCI+Terraform）",
+    category: "Hosting",
+    reasons: ["cost", "dx"],
+    title: "ココナラ、経理会計システムをEC2からECS on Fargateへ移行。単一障害点だったAPI/バッチを分離し1ヶ月のBlue/Green並行運用で切り替え",
+    summary: "ココナラのインフラ・SREチームは、経理会計システムのRubyアップデート計画に合わせ、EC2サーバ管理の運用コスト削減とシステム改善を目的にECS on Fargateへの移行を実施。従来はAPIサーバとバッチ処理が単一のEC2に同居する単一障害点だったが、用途別に3種類のタスク定義(APIサーバ・CPU集約型バッチ・軽量バッチ)を作成して分離・冗長化した。CircleCIでのデプロイ自動化とTerraformによる開発環境整備を行い、本番適用後1ヶ月間はBlue/Green環境で新旧並行運用してから旧EC2を削除した。移行中はEventBridgeからのECSタスク起動時に「Capacity is unavailable at this time.」というエラーに直面したが、StepFunctions経由の呼び出しに変更し再試行機能で対処した。",
+    narrative: "ココナラのシステムプラットフォーム部インフラ・SREチームは、経理会計システムを対象にEC2からECS on Fargateへの移行を行った。対象システムを選定した背景には、アプリケーション側でのRubyアップデート計画があり、基盤運用側が抱えていた「EC2サーバ管理の運用コストを削減したい」という要望と合致したこと、また全体から見て比較的小さな構成で影響度が低く、Fargate推進の初段階として適切だったことがある。従来はAPIサーバとバッチ処理が単一のEC2上に同居する単一障害点になっていたため、ECS on Fargateでは用途別にAPIサーバ・CPU集約型バッチ・軽量バッチの3種類のタスク定義を作成し、分離とコスト最適化を両立した。CI/CDはCircleCIでECS用デプロイラインを構築し、開発環境はTerraformの共通moduleで統一管理、アプリ開発チームからの接続要望にはECS Execを有効化して対応した。責任分界として、タスク定義はアプリケーション側、サービス定義はインフラ側が管理する形を取った。本番適用後は1ヶ月間、新旧環境をBlue/Greenで並行運用し、問題がないことを確認してからEC2環境を破棄した。移行中にはEventBridgeからECSタスクを起動する際に「Capacity is unavailable at this time.」というエラーが発生したが、監視体制のおかげで30分で検知でき、対策としてEventBridgeから直接ECSを呼び出すのではなくStepFunctionsを経由させ、再試行機能を活用する構成に変更した。結果として、APIとバッチの分離・冗長化、Ansible運用が不要になるインフラ管理ツールの統一、アプリ側・インフラ側の責務明確化により、運用コストを削減した。",
+    challenge: "経理会計システムがEC2で単一障害点化。運用コスト削減とRubyアップデート計画への対応が必要",
+    approach: "用途別3種のタスク定義でECS Fargateへ分離移行し、1ヶ月のBlue/Green並行運用後にEC2を削除",
+    resultSummary: "API/バッチの分離・冗長化とツール統一を実現し、運用コストを削減",
+    background: "ココナラのインフラ・SREチームは、経理会計システム(APIサーバとバッチ処理で構成)をEC2上で運用していた。この2つの機能が単一のEC2に同居していたため、単一障害点になっているという課題があった。ちょうどアプリケーション側でRubyアップデート計画が進んでおり、基盤運用側からも「EC2サーバ管理の運用コストを削減したい」という要望が出ていたことから、この2つのニーズが合致するタイミングでECS on Fargateへの移行を検討した。また経理会計システムは全体のシステム群から見ると比較的小さな構成で影響度が低かったため、社内でFargateへの移行を推進していく上での初段階の対象として適切だと判断された。",
+    process: "移行にあたっては、まずインフラ設計としてAPIサーバとバッチ処理を分離し、用途別にAPIサーバ・CPU集約型バッチ・軽量バッチの3種類のタスク定義を作成してコスト最適化を図った。\n\n- CI/CDはCircleCIでECS用のデプロイラインを新規構築し、タスク定義の変更がデプロイ時に反映されるよう工夫した\n- 開発環境はTerraformの共通moduleを活用して統一管理\n- アプリ開発チームからの接続要望に応えるためECS Execを有効化\n- 責任分界として、タスク定義はアプリケーション側、サービス定義はインフラ側が管理する形に整理\n- エラー検知とバッチの周期的実行を担保する監視体制を整備\n\n本番適用後は1ヶ月間、新旧環境をBlue/Green構成で並行運用してから問題ないことを確認し、旧EC2環境を削除した。移行途中ではEventBridgeからECSタスクを起動する際に「Capacity is unavailable at this time.」というエラーに直面したが、監視のおかげで30分で検知でき、EventBridgeから直接ECSを呼び出す方式をやめてStepFunctionsを経由させ、再試行機能を使う構成に変更することで対処した。",
+    results: "APIサーバとバッチ処理の分離・冗長化が実現し、単一障害点だった構成を解消した。Ansibleによる構成管理が不要になるなど、インフラ管理ツールの統一も進んだ。タスク定義とサービス定義でアプリ側・インフラ側の責務が明確になり、これらの改善を通じて運用コストの削減につなげた。記事中に具体的なコスト削減率などの定量的な数値は明記されていない。",
+    lessons: "EventBridgeから直接ECSタスクを起動する構成は、キャパシティ不足時に検知が遅れるリスクがある。StepFunctionsを経由させて再試行機能を持たせることで、こうした一時的なエラーにも耐えられる構成にできる。",
+    compareMetrics: [
+      { label: "インフラ構成", before: "単一EC2（APIサーバ+バッチ処理が同居）", after: "Amazon ECS on Fargate（用途別3タスク定義に分離）" },
+      { label: "構成管理", before: "Ansible", after: "Terraform（共通module）" },
+      { label: "CI/CD", before: "手動/EC2向け運用", after: "CircleCIによるECS自動デプロイ" },
+      { label: "移行運用", before: "—", after: "本番適用後1ヶ月間Blue/Green並行運用" },
+    ],
+    sourceName: "ココナラ Tech Blog（Zenn）「EC2からECS on Fargateへ移行するまでの道のりとポイント」",
+    sourceUrl: "https://zenn.dev/coconala/articles/c41ac8bddae3a8",
+    createdAt: "2023-08-16",
+  },
+  {
     id: "tokyo-gas-eks-to-ecs",
     company: "東京ガス（内製開発チーム）",
     from: "Amazon EKS（EKSアドオン + Istio + Argo CD）",
