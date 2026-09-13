@@ -4,6 +4,33 @@ import type { Migration } from "@/lib/types";
 // 出典URLは各エントリの sourceUrl を参照。全件、公開当時のブログ記事等の一次情報をもとに要約。
 export const CASES: Migration[] = [
   {
+    id: "mybest-vue-to-react",
+    company: "マイベスト（mybest）",
+    from: "Vue 2（vue-apollo）",
+    to: "React（React Hooks + Apollo Client）",
+    category: "Framework",
+    reasons: ["dx"],
+    title: "マイベスト、Vue2からReactへフロントエンドをリプレイス。Vue3へのバージョンアップと修正コストが大差ないと判断し、技術課題3割の時間で約9ヶ月かけて移行",
+    summary: "商品比較・ランキングメディア「mybest」を運営するマイベストは、25画面ほどの管理画面と商品ランキング表示画面で使っていたVue2をReactへリプレイスした。Vue2→3のバージョンアップにはかなりの修正コストがかかりそうで、Reactに置き換えるのと大差ないと判断したことに加え、TypeScript・Storybook・Apollo Clientといった周辺ツールがReactを主なターゲットにしていること、React HooksやNext.jsのISRなどエコシステムの進化も後押しになった。バックエンドエンジニア中心の時期に合っていた「Easy」なVueから、フロントエンドエンジニアが保守しやすい「Simple」なReactへ移るという考え方で、src/react/ディレクトリでVueとReactを共存させながら画面単位で移行。技術課題3割の時間を使い、9ヶ月ほどかけて（ほぼ）全てのVueをReactへ置き換えた。",
+    narrative: "株式会社マイベストのフロントエンドチームは、商品ランキングメディア「mybest」の管理画面と商品ランキング表示画面で使っていたVue2をReactへリプレイスした。管理画面は25画面ほどあり、ほぼ全ての画面に編集機能がある。移行を検討した直接のきっかけは、Vue2→3のバージョンアップにかなりの修正コストがかかりそうで、それならReactに置き換えるのと大差ないのではと考えたことにある。さらにTypeScript・Storybook・Apollo Clientなど多くの周辺ツールがReactを主なターゲットとして作られていること、React HooksやNext.jsのISRといったReact側のエコシステムの進化も判断材料になった。記事では「VueはEasy、ReactはSimple」と整理し、バックエンドエンジニアが多かった時期には手軽なVueが合っていたが、フロントエンドエンジニアが増えた現在は保守しやすいSimpleな設計を取れるReactの方が適していると説明している。体制はフロントエンドエンジニアが正社員3名・業務委託（副業）4名で、エンジニアはビジネス課題7割・技術課題3割の配分で時間を使える。移行はsrc/react/ディレクトリを用意してVueとReactを共存させ、画面単位で置き換える方式を採用。vue-apolloへの依存は外しつつGraphQL・Apollo Clientのロジックは活かし、最初の1画面の実装を通じて設計を固めてから横展開した。技術課題3割の時間を使い、9ヶ月ほどかけて（ほぼ）全てのVueをReactへリプレイスし、Hooksによるシンプルな設計やカスタムフックでのコードの統一、Storybookとの連携のしやすさといった効果を得ている。",
+    challenge: "Vue2→3の修正コストが大きく、TypeScriptやStorybook等の周辺ツールとの相性も課題だった",
+    approach: "src/react/でVueとReactを共存させ、技術課題3割の時間で画面単位にReactへ置き換え",
+    resultSummary: "約9ヶ月で（ほぼ）全てのVueをReact化し、Hooks中心のシンプルな設計に移行",
+    background: "マイベストが運営する「mybest」は、商品を比較・ランキング形式で紹介するメディアで、フロントエンドでは商品ランキング表示画面と、コンテンツを管理する管理画面にVue2を使っていた。管理画面は25画面ほどあり、ほぼ全ての画面で編集機能がある。それ以外の画面はRailsのslimで表示している。Vue2→3のバージョンアップにはかなりの修正コストがかかりそうで、Reactに置き換えるのと大差ないのではないかという見立てがあった。加えて、TypeScript・Storybook・Apollo Clientなど多くのツールがReactを主なターゲットとして作られ、Vue対応はプラグインで後から追加される形が多いこと、React HooksやNext.jsのISRなどReact側のエコシステムが進化を続けていることも移行を後押しした。記事では、バックエンドエンジニアが多かった時期にはEasyなVueが合っていたが、フロントエンドエンジニアが増えた今は保守しやすいSimpleなReactが適していると整理している。",
+    process: "移行は通常の開発と並行し、技術課題に割ける時間の中で進められた。\n\n- 体制: フロントエンドエンジニアは正社員3名、業務委託（副業）4名\n- 時間配分: エンジニアはビジネス課題7割、技術課題3割の配分で時間を使える\n- src/react/ディレクトリを作り、VueとReactを共存させる構成に\n- 画面単位で順にReactへ置き換え\n- vue-apolloへの依存を外し、GraphQL・Apollo Clientのロジックは維持\n- 最初の1画面の実装で設計パターンを固めてから横展開\n\n技術課題3割の時間を使い、9ヶ月ほどかけて（ほぼ）全てのVueをReactへリプレイスした。記事では、移行前提だとゼロベースで設計するよりも考慮が必要なポイントが多いと振り返っている。",
+    results: "9ヶ月ほどかけて（ほぼ）全てのVueがReactに置き換わった。React Hooksによって関心ごとを分離したシンプルな設計が取りやすくなり、カスタムフックでコードの書き方を統一しやすくなった。Reactは設計に関する公開情報も豊富で、StorybookやApollo Clientとの連携もしやすくなった。今後は、約半分の画面で使われているRailsのslimについてもNext.jsを導入して全画面React化するプロジェクトが動いている。記事中にパフォーマンスやコストの定量的な改善値は明記されていない。",
+    lessons: "移行前提のリプレイスは、ゼロベースで設計するよりも考慮が必要なポイントが多い。既存コードとの共存方法や段階的な置き換えの単位まで含めて設計し、スケジュールにも余裕を持たせる必要がある。また、Vueを選んだ当時はバックエンドエンジニア中心のチームにEasyさが合っていたように、技術選定はチーム構成の変化に合わせて見直すものだという視点が示されている。",
+    compareMetrics: [
+      { label: "フロントエンドフレームワーク", before: "Vue 2（vue-apollo）", after: "React（Hooks + Apollo Client）" },
+      { label: "管理画面の画面数", before: "25画面ほど", after: "25画面ほど" },
+      { label: "移行期間", before: "—", after: "9ヶ月ほど（技術課題3割の時間）" },
+      { label: "フロントエンド体制", before: "—", after: "正社員3名・業務委託（副業）4名" },
+    ],
+    sourceName: "マイベスト Tech Blog（Zenn）「VueをReactにリプレイスしてEasyからSimpleにした話」",
+    sourceUrl: "https://zenn.dev/mybest_dev/articles/90c62b850268e4",
+    createdAt: "2022-08-26",
+  },
+  {
     id: "gmo-media-algolia-to-elasticsearch",
     company: "GMOメディア（プリ小説）",
     from: "Algolia（従量課金制の検索SaaS）",
